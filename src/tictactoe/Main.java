@@ -2,7 +2,8 @@ package tictactoe;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.printf("X O X%nO X O%nX X O%n");
+        Field.getInstance().fillRandom();
+        System.out.println(Field.getInstance().toString());
     }
 
 
