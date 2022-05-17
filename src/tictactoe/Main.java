@@ -1,64 +1,54 @@
 package tictactoe;
 
-import java.util.*;
+import java.util.Scanner;
 
 public class Main {
+    public static void printField(char[][] field) {
+        System.out.println("---------");
+        for (int i = 0; i < 3; ++i) {
+            System.out.print("| ");
+            for (int j = 0; j < 3; ++j) {
+                System.out.print(field[i][j] + " ");
+            }
+            System.out.println("|");
+        }
+        System.out.println("---------");
+    }
+
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-
+        Scanner s = new Scanner(System.in);
         System.out.print("Enter cells: ");
-        char[] xo = sc.nextLine().toCharArray();
+        String x = s.next();
         char[][] field = new char[3][3];
-
-        int xs = 0;
-        int os = 0;
-        Boolean xxx = false;
-        Boolean ooo = false;
-
-        // fill up the field, count X's & O's
-        for (int i = 0; i < 9; i++) {
-            field[i/3][i%3] = xo[i];
-
-            if (xo[i] == 'X') {
-                xs += 1;
-            } else if (xo[i] == 'O') {
-                os += 1;
+        int num_x = 0, num_o = 0;
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                field[i][j] = x.charAt(i * 3 + j);
+                if (field[i][j] == 'X') num_x++;
+                if (field[i][j] == 'O') num_o++;
             }
         }
-
-        // check if row or column or any of diagonals is win for someone
-        for (int i = 0; i < 3; i++) {
-            int row = 0;
-            int clm = 0;
-            int mDiag = 0;
-            int aDiag = 0;
-
-            for (int j = 0; j < 3; j++) {
-                row += field[i][j];
-                clm += field[j][i];
-                mDiag += field[j][j];
-                aDiag += field[j][2-j];
+        printField(field);
+        while (true) {
+            System.out.println("Enter the coordinates: ");
+            int x1, x2;
+            try {
+                x1 = s.nextInt();
+                x2 = s.nextInt();
+                if (x1 < 1 || x1 > 3 || x2 < 1 || x2 > 3) {
+                    System.out.println("Coordinates should be from 1 to 3!");
+                } else {
+                    if (field[x1 - 1][x2 - 1] != '_') {
+                        System.out.println("This cell is occupied! Choose another one!");
+                    } else {
+                        field[x1 - 1][x2 - 1] = 'X';
+                        break;
+                    }
+                }
+            } catch(Exception e) {
+                System.out.println("You should enter numbers!");
             }
-
-            // ASCII value for X is 88 (X+X+X is 264)
-            // ASCII value for O is 79 (O+O+O is 237)
-            xxx = xxx || row == 264 || clm == 264 || mDiag == 264 || aDiag == 264;
-            ooo = ooo || row == 237 || clm == 237 || mDiag == 237 || aDiag == 237;
         }
-
-        // print field and result
-        System.out.println("---------");
-        for (int i = 0; i < 3; i++) {
-            System.out.println(String.format("| %c %c %c |", field[i][0], field[i][1], field[i][2]));
-        }
-        System.out.println("---------");
-
-        String result = Math.abs(xs-os) > 1 || xxx && ooo ? "Impossible"
-                : xxx ? "X wins"
-                : ooo ? "O wins"
-                : xs + os == 9 ? "Draw"
-                : "Game not finished";
-
-        System.out.println(result);
+        printField(field);
     }
 }
